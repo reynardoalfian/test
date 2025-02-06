@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for fellaroni on 2025-02-06T06:20:06Z
+# fly.toml app configuration file generated for fellarini on 2025-02-06T06:33:33Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'fellaroni'
+app = 'fellarini'
 primary_region = 'iad'
 
 [build]
