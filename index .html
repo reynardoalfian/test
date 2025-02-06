@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine & Chill</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: white;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Floating Hearts Animation */
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #e50914;
+            animation: float-up var(--duration) linear infinite;
+            left: var(--left);
+            opacity: 0.6;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glowing Background */
+        .glow {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #e5091422 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Landing Page */
+        #landing h1 {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: title-reveal 1.5s ease-out;
+            background: linear-gradient(45deg, #ff3366, #e50914, #ff3366);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes title-reveal {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #landing p {
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: #ffffff;
+            animation: subtitle-fade 2s ease-out;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+        }
+
+        @keyframes subtitle-fade {
+            0% { opacity: 0; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1.5rem;
+            animation: buttons-appear 2.5s ease-out;
+        }
+
+        @keyframes buttons-appear {
+            0% { opacity: 0; transform: translateY(30px); }
+            60% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        button {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .yes-btn {
+            background-color: white;
+            color: black;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
+        }
+
+        .yes-btn::after {
+            content: '❤️';
+            position: absolute;
+            right: -20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .yes-btn:hover::after {
+            right: 10px;
+            opacity: 1;
+        }
+
+        .no-btn {
+            background-color: #303030;
+            color: white;
+        }
+
+        .no-btn:hover {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        /* Decorative elements */
+        .corner-heart {
+            position: fixed;
+            font-size: 2rem;
+            animation: pulse-scale 2s ease-in-out infinite;
+        }
+
+        .top-left { top: 20px; left: 20px; }
+        .top-right { top: 20px; right: 20px; }
+        .bottom-left { bottom: 20px; left: 20px; }
+        .bottom-right { bottom: 20px; right: 20px; }
+
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        
+
+        /* Food Selection Page */
+        #food-selection h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            animation: title-reveal 1.5s ease-out;
+            background: linear-gradient(45deg, #ff3366, #e50914, #ff3366);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .profiles {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+            animation: profiles-appear 1s ease-out;
+        }
+
+        @keyframes profiles-appear {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            width: 10rem;
+            height: 10rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .profile:hover .profile-icon {
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .profile:hover .profile-name {
+            color: white;
+        }
+
+        .profile-name {
+            margin-top: 1rem;
+            color: gray;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .manage-btn {
+            background: transparent;
+            border: 1px solid gray;
+            color: gray;
+            padding: 0.5rem 1.5rem;
+            animation: buttons-appear 2s ease-out;
+        }
+
+        .manage-btn:hover {
+            border-color: white;
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: modal-appear 0.3s ease-out;
+        }
+
+        @keyframes modal-appear {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content {
+            background-color: #181818;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #e50914;
+        }
+
+        .modal p {
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-size: 1.2rem;
+        }
+
+        .food-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #222;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .food-input:focus {
+            outline: none;
+            border-color: #e50914;
+        }
+
+        .error-message {
+            color: #e50914;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-container" id="hearts-container"></div>
+    
+    <!-- Glowing Effect -->
+    <div class="glow"></div>
+
+    <!-- Decorative Corner Hearts -->
+    <div class="corner-heart top-left">❤️</div>
+    <div class="corner-heart top-right">❤️</div>
+    <div class="corner-heart bottom-left">❤️</div>
+    <div class="corner-heart bottom-right">❤️</div>
+
+    <!-- Landing Page -->
+    <div id="landing" class="screen active">
+        <h1>Fellaroni Macaroni Bologna Homie Pony Tony</h1>
+        <p>Will you be my Valentine?</p>
+        <div class="button-container">
+            <button class="yes-btn" onclick="showScreen('food-selection')">Of Course!!</button>
+            <button class="no-btn" onclick="showScreen('landing')">No :(</button>
+        </div>
+    </div>
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="modal">
+        <div class="modal-content" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
+            <h3>Real-time Responses</h3>
+            <div id="responses-list" style="text-align: left; margin: 20px 0;">
+                <!-- Responses will appear here -->
+            </div>
+            <button class="yes-btn" onclick="toggleAdminPanel()">Close Panel</button>
+        </div>
+    </div>
+
+    <!-- Food Selection Page -->
+    <div id="food-selection" class="screen">
+        <h2>What's for dinner?</h2>
+        <div class="profiles">
+            <div class="profile" onclick="showModal('Indonesian Fried Rice (Homemade)')">
+                <div class="profile-icon" style="background-color: #e50914;">🍚</div>
+                <div class="profile-name">Nasi Goreng</div>
+            </div>
+            <div class="profile" onclick="showModal('Hotpot')">
+                <div class="profile-icon" style="background-color: #0066e3;">🍲</div>
+                <div class="profile-name">Hotpot</div>
+            </div>
+            <div class="profile" onclick="showModal('Dumplings (Homemade)')">
+                <div class="profile-icon" style="background-color: #13a555;">🥟</div>
+                <div class="profile-name">Dumplings</div>
+            </div>
+            <div class="profile" onclick="showModal('Samosa (Homemade)')">
+                <div class="profile-icon" style="background-color: #e3b500;">🥟</div>
+                <div class="profile-name">Samosa</div>
+            </div>
+            <div class="profile" onclick="showAddFoodModal()">
+                <div class="profile-icon" style="background-color: #303030;">➕</div>
+                <div class="profile-name">Add Food</div>
+            </div>
+        </div>
+        <button class="manage-btn">Manage Preferences</button>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal">
+        <div class="modal-content">
+            <h3>Perfect Choice!</h3>
+            <p>Get ready for an amazing <span id="cuisine-choice"></span> dinner date! ❤️</p>
+            <button class="yes-btn" onclick="hideModal()">Can't Wait!</button>
+        </div>
+    </div>
+
+    <!-- No Response Modal -->
+    <div id="no-modal" class="modal">
+        <div class="modal-content">
+            <h3>I'm gonna kill ya!<p>&#x1F620;</p></h3>
+            <p></p>
+            <button class="yes-btn" onclick="hideNoModal()">Let me think again</button>
+        </div>
+    </div>
+
+    <!-- Add Food Modal -->
+    <div id="add-food-modal" class="modal">
+        <div class="modal-content">
+            <h3>Add New Food Option</h3>
+            <div id="food-error" class="error-message">Please enter a valid food name</div>
+            <input type="text" id="new-food-input" placeholder="Enter food name" class="food-input">
+            <button class="yes-btn" onclick="submitNewFood()">Add Food</button>
+            <button class="no-btn" onclick="hideAddFoodModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMvlDSFDeyw5A6z50hG0vO4Sgs6VJRf3U",
+            authDomain: "fella-bb1f8.firebaseapp.com",
+            databaseURL: "https://fella-bb1f8-default-rtdb.firebaseio.com",
+            projectId: "fella-bb1f8",
+            storageBucket: "fella-bb1f8.firebasestorage.app",
+            messagingSenderId: "189826965196",
+            appId: "1:189826965196:web:7f0f59e1d7227cec662c69",
+            measurementId: "G-E14L2MQNQD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Make Firebase functions globally available
+        window.saveChoice = (choice) => {
+            const timestamp = new Date().toISOString();
+            const choiceRef = ref(db, 'choices/' + timestamp);
+            set(choiceRef, {
+                choice: choice,
+                timestamp: timestamp
+            }).then(() => {
+                console.log('Choice saved successfully:', choice);
+            }).catch((error) => {
+                console.error('Error saving choice:', error);
+            });
+        };
+
+        window.addNewFood = (foodName) => {
+            const newFoodRef = ref(db, 'customFoods');
+            push(newFoodRef, {
+                name: foodName,
+                timestamp: new Date().toISOString()
+            });
+        };
+    </script>
+
+    <script>
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartSymbols = ['❤️', '💖', '💝', '💗', '💓'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.setProperty('--left', `${Math.random() * 100}%`);
+                heart.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                container.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 300);
+        }
+
+        function showScreen(screenId) {
+            if (screenId === 'landing' && !event.target.classList.contains('yes-btn')) {
+                showNoModal();
+                return;
+            }
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showModal(cuisine) {
+            document.getElementById('cuisine-choice').textContent = cuisine;
+            document.getElementById('result-modal').classList.add('active');
+            // Save choice to Firebase
+            window.saveChoice(cuisine);
+        }
+
+        function hideModal() {
+            document.getElementById('result-modal').classList.remove('active');
+        }
+
+        function showNoModal() {
+            document.getElementById('no-modal').classList.add('active');
+        }
+
+        function hideNoModal() {
+            document.getElementById('no-modal').classList.remove('active');
+        }
+
+        function showAddFoodModal() {
+            document.getElementById('add-food-modal').classList.add('active');
+            document.getElementById('new-food-input').focus();
+        }
+
+        function hideAddFoodModal() {
+            document.getElementById('add-food-modal').classList.remove('active');
+            document.getElementById('new-food-input').value = '';
+            document.getElementById('food-error').classList.remove('active');
+        }
+
+        function submitNewFood() {
+            const input = document.getElementById('new-food-input');
+            const foodName = input.value.trim();
+            
+            if (foodName) {
+                // Save to Firebase
+                window.addNewFood(foodName);
+                
+                // Add new option to the UI
+                addFoodToUI(foodName);
+                
+                // Close modal
+                hideAddFoodModal();
+            } else {
+                document.getElementById('food-error').classList.add('active');
+            }
+        }
+
+        function addFoodToUI(foodName) {
+            const profilesContainer = document.querySelector('.profiles');
+            const addButton = profilesContainer.lastElementChild;
+            
+            const newProfile = document.createElement('div');
+            newProfile.className = 'profile';
+            newProfile.onclick = () => showModal(foodName);
+            
+            // Generate random color for new food item
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            
+            newProfile.innerHTML = `
+                <div class="profile-icon" style="background-color: ${randomColor};">🍽️</div>
+                <div class="profile-name">${foodName}</div>
+            `;
+            
+            profilesContainer.insertBefore(newProfile, addButton);
+        }
+
+        // Initialize hearts animation
+        createHearts();
+
+        // Add enter key support for the food input
+        document.getElementById('new-food-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitNewFood();
+            }
+        });
+    </script>
+</body>
+</html>
